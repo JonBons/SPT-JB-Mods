@@ -110,8 +110,8 @@ public class Plugin : BaseUnityPlugin
     {
         public Limit()
         {
-            lower = 0;
-            upper = 360;
+            lower = -180;
+            upper = 180;
         }
         public Limit(float low, float up)
         {
