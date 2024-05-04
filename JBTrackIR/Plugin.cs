@@ -16,7 +16,7 @@ using UnityEngine;
 
 namespace JBTrackIR;
 
-[BepInPlugin("com.jonbons.trackir", "JonBons.TrackIR", "1.0.0")]
+[BepInPlugin("com.jonbons.trackir", "JonBons.TrackIR", "1.0.1")]
 public class Plugin : BaseUnityPlugin
 {
     static ConfigEntry<bool> tirEnabled;
@@ -36,9 +36,16 @@ public class Plugin : BaseUnityPlugin
         tirClient = new TrackIRClient();
         if (tirClient != null && !tirRunning)
         {
-            tirClient.TrackIR_Enhanced_Init();
-            tirRunning = true;
-            Logger.LogInfo($"com.jonbons.trackir: trackir is running");
+            var result = tirClient.TrackIR_Enhanced_Init();
+            Logger.LogInfo($"com.jonbons.trackir: detecting... {result}");
+            if (!string.IsNullOrEmpty(result))
+            {
+                tirRunning = true;
+                Logger.LogInfo($"com.jonbons.trackir: detected");
+            }
+            else {
+                Logger.LogInfo($"com.jonbons.trackir: not detected");
+            }
         }
 
         BindSettings();
