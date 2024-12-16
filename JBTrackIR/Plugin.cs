@@ -1,4 +1,4 @@
-﻿using Aki.Reflection.Patching;
+﻿using SPT.Reflection.Patching;
 using BepInEx;
 using BepInEx.Configuration;
 using EFT;
@@ -16,7 +16,7 @@ using UnityEngine;
 
 namespace JBTrackIR;
 
-[BepInPlugin("com.jonbons.trackir", "JonBons.TrackIR", "1.0.2")]
+[BepInPlugin("com.jonbons.trackir", "JonBons.TrackIR", "1.0.3")]
 public class Plugin : BaseUnityPlugin
 {
     static ConfigEntry<bool> tirRefresh;

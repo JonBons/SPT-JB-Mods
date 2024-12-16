@@ -23,14 +23,20 @@
     <Reference Include="0Harmony">
       <HintPath>..\References\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="Aki.Reflection">
-      <HintPath>..\References\Aki.Reflection.dll</HintPath>
-    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\References\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
       <HintPath>..\References\BepInEx.dll</HintPath>
+    </Reference>
+    <Reference Include="spt-common">
+      <HintPath>..\References\spt-common.dll</HintPath>
+    </Reference>
+    <Reference Include="spt-core">
+      <HintPath>..\References\spt-core.dll</HintPath>
+    </Reference>
+    <Reference Include="spt-reflection">
+      <HintPath>..\References\spt-reflection.dll</HintPath>
     </Reference>
     <Reference Include="TrackIRUnity">
       <HintPath>..\References\TrackIRUnity.dll</HintPath>
