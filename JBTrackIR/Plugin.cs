@@ -204,6 +204,7 @@ public class Plugin : BaseUnityPlugin
                 //rot.z = Mathf.Clamp(-tid.fNPRoll * rotationReductionFactor, rollLimits.lower, rollLimits.upper);
             }
 
+            __instance.HeadRotation = rot; // sync head angles
             __instance.ProceduralWeaponAnimation.SetHeadRotation(rot);
             //Logger.LogInfo(string.Format("TIR DATA Final pos = {0}; Final rot = {1}", pos, rot));
         }
