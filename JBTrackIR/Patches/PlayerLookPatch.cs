@@ -29,14 +29,6 @@ public class PlayerLookPatch : ModulePatch
         if (!TrackIRManager.Instance.Running) return;
         if (!Settings.Enabled.Value) return;
 
-        // FIXME: this didn't fix the Q/E bug, might need to run after game world is loaded
-        //if (!running)
-        //{
-        //    __instance.method_3(-1f);
-        //    __instance.method_4(-1f);
-        //    running = true;
-        //}
-
         var data = new TrackIRData(TrackIRManager.Instance.Client);
         UpdateHeadPosition(ref __instance, ref data);
         UpdateHeadRotation(ref __instance, ref data);
@@ -45,9 +37,6 @@ public class PlayerLookPatch : ModulePatch
     }
 
     private static void UpdateLeaning(ref Player __instance, ref TrackIRData data) {
-        // TODO: figure out why tilt has no roll until the player presses Q or E once
-        // nothing to do with blind fire
-
         // Calculate target tilt value based on axis
         float targetTilt = (data.X * 20) * Settings.LeanSensitivityCoef.Value;
 
@@ -75,7 +64,7 @@ public class PlayerLookPatch : ModulePatch
             }
         }
 
-        // Handle leaning via axis (only if no leaning key is pressed and interpolation is done)
+        // Leaning via axis (only if no leaning key is pressed and interpolation is done)
         if (PlayerControlsPatch.CommandLean == 0 && !wasCommandedLean)
         {
             __instance.MovementContext.SmoothedTilt = targetTilt;
@@ -95,7 +84,7 @@ public class PlayerLookPatch : ModulePatch
         localEulers.x = data.Pitch;
         localEulers.z = data.Roll;
 
-        __instance.HeadRotation = localEulers; // sync head angles
-        __instance.ProceduralWeaponAnimation.SetHeadRotation(localEulers); // update camera
+        __instance.HeadRotation = localEulers; // Sync head angles
+        __instance.ProceduralWeaponAnimation.SetHeadRotation(localEulers); // Update camera
     }
 }
