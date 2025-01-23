@@ -1,5 +1,8 @@
 ﻿using BepInEx.Configuration;
 using BepInEx.Logging;
+using EFT.Console.Core;
+using EFT.UI;
+using EFT;
 using JBTrackIR.Components;
 using RootMotion;
 using System;
@@ -16,6 +19,7 @@ internal class Settings
     public static ConfigEntry<bool> RefreshDevices;
     public static ConfigEntry<bool> Enabled;
     public static ConfigEntry<float> SensitivityCoef;
+    public static ConfigEntry<float> LeanSensitivityCoef;
     public static ConfigEntry<int> PitchLowerLimit;
     public static ConfigEntry<int> PitchUpperLimit;
     public static ConfigEntry<int> YawLowerLimit;
@@ -24,12 +28,6 @@ internal class Settings
     public static ConfigEntry<int> RollUpperLimit;
 
     public static ConfigEntry<bool> DebugEnabled;
-    public static ConfigEntry<int> DebugValMode;
-    public static ConfigEntry<int> DebugValMode2;
-    public static ConfigEntry<float> DebugValX;
-    public static ConfigEntry<float> DebugValY;
-    public static ConfigEntry<float> DebugValZ;
-    public static ConfigEntry<float> DebugValLean;
 
     public static void Init(ConfigFile config, ManualLogSource logger)
     {
@@ -57,6 +55,16 @@ internal class Settings
             new ConfigDescription(
                 "Senstivity coefficient to apply to all TrackIR inputs",
                 new AcceptableValueRange<float>(0, 1)
+            )
+        );
+
+        LeanSensitivityCoef = config.Bind(
+            MainSectionTitle,
+            "TrackIR Lean Sensitivity coef",
+            1f,
+            new ConfigDescription(
+                "Lean Senstivity coefficient for leaning",
+                new AcceptableValueRange<float>(0, 2)
             )
         );
 
@@ -133,65 +141,6 @@ internal class Settings
             new ConfigDescription("Enable TrackIR debugging info")
         );
         DebugEnabled.SettingChanged += DebugEnabled_SettingChanged;
-
-        DebugValMode = config.Bind(
-            DebugSectionTitle,
-            "TrackIR Debug Mode",
-            1,
-            new ConfigDescription(
-                "TrackIR debug mode",
-                new AcceptableValueRange<int>(1, 3)
-            )
-        );
-        DebugValMode2 = config.Bind(
-            DebugSectionTitle,
-            "TrackIR Debug Mode 2",
-            1,
-            new ConfigDescription(
-                "TrackIR debug mode 2",
-                new AcceptableValueRange<int>(1, 3)
-            )
-        );
-
-        DebugValX = config.Bind(
-            DebugSectionTitle,
-            "TrackIR Debug val X",
-            1f,
-            new ConfigDescription(
-                "TrackIR debug value X",
-                new AcceptableValueRange<float>(-100, 100)
-            )
-        );
-
-        DebugValY = config.Bind(
-            DebugSectionTitle,
-            "TrackIR Debug val Y",
-            1f,
-            new ConfigDescription(
-                "TrackIR debug value Y",
-                new AcceptableValueRange<float>(-100, 100)
-            )
-        );
-
-        DebugValZ = config.Bind(
-            DebugSectionTitle,
-            "TrackIR Debug val Z",
-            1f,
-            new ConfigDescription(
-                "TrackIR debug value Z",
-                new AcceptableValueRange<float>(-100, 100)
-            )
-        );
-
-        DebugValLean = config.Bind(
-            DebugSectionTitle,
-            "TrackIR Debug val Lean",
-            0f,
-            new ConfigDescription(
-                "TrackIR debug value Lean",
-                new AcceptableValueRange<float>(-1, 1)
-            )
-        );
     }
 
     private static void RefreshDevices_SettingChanged(object sender, EventArgs e)

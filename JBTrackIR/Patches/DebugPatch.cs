@@ -1,4 +1,7 @@
-﻿using EFT;
+﻿using Comfort.Common;
+using EFT;
+using EFT.Console.Core;
+using EFT.UI;
 using JBTrackIR.Components;
 using SPT.Reflection.Patching;
 using System.Reflection;

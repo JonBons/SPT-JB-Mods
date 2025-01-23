@@ -1,9 +1,4 @@
 ﻿using JBTrackIR.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Security.Cryptography;
-using System.Text;
 using TrackIRUnity;
 using UnityEngine;
 
@@ -11,6 +6,13 @@ namespace JBTrackIR.Helpers
 {
     internal class TrackIRData
     {
+        public float RawPitch { get; private set; }
+        public float RawYaw { get; private set; }
+        public float RawRoll { get; private set; }
+        public float RawX { get; private set; }
+        public float RawY { get; private set; }
+        public float RawZ { get; private set; }
+
         public float Pitch { get; private set; }
         public float Yaw { get; private set; }
         public float Roll { get; private set; }
@@ -30,20 +32,29 @@ namespace JBTrackIR.Helpers
 
             var tirData = client.client_HandleTrackIRData();
 
-            var positionReductionFactor = 0.015f * Settings.SensitivityCoef.Value;
-            var rotationReductionFactor = 0.045f * Settings.SensitivityCoef.Value;
-            var rollReductionFactor = (0.045f * Settings.SensitivityCoef.Value) * 0.75f;
+            RawPitch = tirData.fNPPitch;
+            RawYaw = tirData.fNPYaw;
+            RawRoll = tirData.fNPRoll;
+            RawX = tirData.fNPX;
+            RawY = tirData.fNPY;
+            RawZ = tirData.fNPZ;
 
-            Yaw = Mathf.Clamp(tirData.fNPYaw * rotationReductionFactor,
+            var positionMultiplier = 0.000031f;
+            var rotationMultiplier = 0.011f;
+
+            // TODO: add XYZ limits??
+            X = -RawX * positionMultiplier;
+            Y = RawY * positionMultiplier;
+            Z = -RawZ * positionMultiplier;
+
+            Yaw = Mathf.Clamp(RawYaw * rotationMultiplier,
                 TrackIRManager.Instance.YawLimits.lower, TrackIRManager.Instance.YawLimits.upper);
-            Pitch = Mathf.Clamp(tirData.fNPPitch * rotationReductionFactor,
+            Pitch = Mathf.Clamp(RawPitch * rotationMultiplier,
                 TrackIRManager.Instance.PitchLimits.lower, TrackIRManager.Instance.PitchLimits.upper);
-            Roll = Mathf.Clamp(-tirData.fNPRoll * rollReductionFactor,
+            Roll = Mathf.Clamp(-RawRoll * rotationMultiplier,
                 TrackIRManager.Instance.RollLimits.lower, TrackIRManager.Instance.RollLimits.upper);
 
-            X = -tirData.fNPX * (positionReductionFactor * 0.15f);
-            Y = tirData.fNPY * (positionReductionFactor * 0.15f);
-            Z = -tirData.fNPZ * (positionReductionFactor * 0.15f);
+
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using BepInEx;
 using System;
-using TrackIRUnity;
 using JBTrackIR.Patches;
 using JBTrackIR.Utilities;
 
@@ -21,6 +20,8 @@ public class Plugin : BaseUnityPlugin
         {
             new DebugPatch().Enable();
             new PlayerLookPatch().Enable();
+            new PlayerControlsPatch().Enable();
+            new PlayerLeanFixPatch().Enable();
         }
         catch (Exception ex)
         {
