@@ -1,10 +1,6 @@
 ﻿using BepInEx.Configuration;
 using BepInEx.Logging;
-using EFT.Console.Core;
-using EFT.UI;
-using EFT;
 using JBTrackIR.Components;
-using RootMotion;
 using System;
 
 namespace JBTrackIR.Utilities;
