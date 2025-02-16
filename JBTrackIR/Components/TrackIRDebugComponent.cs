@@ -55,12 +55,13 @@ namespace JBTrackIR.Components
             // Build the data to show in the GUI
             string guiText = "TrackIR Debug\n";
             guiText += "-----------------------\n";
-            guiText += $"Pitch: {Math.Round(tirData.Pitch, 2)}\n";
-            guiText += $"Yaw: {Math.Round(tirData.Yaw, 2)}\n";
-            guiText += $"Roll: {Math.Round(tirData.Roll, 2)}\n";
-            guiText += $"X: {Math.Round(tirData.X, 2)}\n";
-            guiText += $"Y: {Math.Round(tirData.Y, 2)}\n";
-            guiText += $"Z: {Math.Round(tirData.Z, 2)}\n";
+            guiText += $"Pitch: {tirData.Pitch}\n";
+            guiText += $"Yaw: {tirData.Yaw}\n";
+            guiText += $"Roll: {tirData.Roll}\n";
+            guiText += $"X: {tirData.X}\n";
+            guiText += $"Y: {tirData.Y}\n";
+            guiText += $"Z: {tirData.Z}\n";
+            guiText += $"Tilt: {tirData.TargetTilt}\n";
 
             // Draw the GUI
             guiContent.text = guiText;

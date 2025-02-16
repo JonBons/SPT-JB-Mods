@@ -30,16 +30,13 @@ public class PlayerLookPatch : ModulePatch
         if (!Settings.Enabled.Value) return;
 
         var data = new TrackIRData(TrackIRManager.Instance.Client);
-        UpdateHeadPosition(ref __instance, ref data);
         UpdateHeadRotation(ref __instance, ref data);
+        UpdateHeadPosition(ref __instance, ref data);
 
         //Logger.LogInfo(string.Format("TIR DATA Final pos = {0}; Final rot = {1}", pos, rot));
     }
 
     private static void UpdateLeaning(ref Player __instance, ref TrackIRData data) {
-        // Calculate target tilt value based on axis
-        float targetTilt = (data.X * 20) * Settings.LeanSensitivityCoef.Value;
-
         // Check if the lean was commanded via keyboard
         if (PlayerControlsPatch.CommandLean != 0) wasCommandedLean = true;
 
@@ -55,10 +52,10 @@ public class PlayerLookPatch : ModulePatch
         if (PlayerControlsPatch.CommandLean == 0 && wasCommandedLean)
         {
             // Lerp from commandedTilt to targetTilt
-            __instance.MovementContext.SmoothedTilt = Mathf.Lerp(commandedTilt, targetTilt, lerpSpeed * Time.deltaTime);
+            __instance.MovementContext.SmoothedTilt = Mathf.Lerp(commandedTilt, data.TargetTilt, lerpSpeed * Time.deltaTime);
 
             // If close enough to the target, release control back to the axis
-            if (Mathf.Abs(__instance.MovementContext.SmoothedTilt - targetTilt) < threshold)
+            if (Mathf.Abs(__instance.MovementContext.SmoothedTilt - data.TargetTilt) < threshold)
             {
                 wasCommandedLean = false;
             }
@@ -67,7 +64,7 @@ public class PlayerLookPatch : ModulePatch
         // Leaning via axis (only if no leaning key is pressed and interpolation is done)
         if (PlayerControlsPatch.CommandLean == 0 && !wasCommandedLean)
         {
-            __instance.MovementContext.SmoothedTilt = targetTilt;
+            __instance.MovementContext.SmoothedTilt = data.TargetTilt;
         }
     }
 

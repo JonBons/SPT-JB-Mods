@@ -20,6 +20,8 @@ namespace JBTrackIR.Helpers
         public float Y { get; private set; }
         public float Z { get; private set; }
 
+        public float TargetTilt { get; private set; }
+
         public TrackIRData(TrackIRClient client)
         {
             UpdateValues(client);
@@ -43,16 +45,24 @@ namespace JBTrackIR.Helpers
             var rotationMultiplier = 0.011f;
 
             // TODO: add XYZ limits??
-            X = -RawX * positionMultiplier;
-            Y = RawY * positionMultiplier;
-            Z = -RawZ * positionMultiplier;
+            X = Mathf.Round((-RawX * positionMultiplier) * 1000) / 1000;
+            Y = Mathf.Round((RawY * positionMultiplier) * 1000) / 1000;
+            Z = Mathf.Round((-RawZ * positionMultiplier) * 1000) / 1000;
 
             Yaw = Mathf.Clamp(RawYaw * rotationMultiplier,
                 TrackIRManager.Instance.YawLimits.lower, TrackIRManager.Instance.YawLimits.upper);
+            Yaw = Mathf.Round(Yaw * 1000) / 1000;
+
             Pitch = Mathf.Clamp(RawPitch * rotationMultiplier,
                 TrackIRManager.Instance.PitchLimits.lower, TrackIRManager.Instance.PitchLimits.upper);
+            Pitch = Mathf.Round(Pitch * 1000) / 1000;
+
             Roll = Mathf.Clamp(-RawRoll * rotationMultiplier,
                 TrackIRManager.Instance.RollLimits.lower, TrackIRManager.Instance.RollLimits.upper);
+            Roll = Mathf.Round(Roll * 1000) / 1000;
+
+            var targetTilt = (X * 20) * Settings.LeanSensitivityCoef.Value;
+            TargetTilt = Mathf.Round(targetTilt * 10) / 10;
 
 
         }
