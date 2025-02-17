@@ -45,19 +45,19 @@ namespace JBTrackIR.Helpers
             var rotationMultiplier = 0.011f;
 
             // TODO: add XYZ limits??
-            X = Mathf.Round((-RawX * positionMultiplier) * 1000) / 1000;
-            Y = Mathf.Round((RawY * positionMultiplier) * 1000) / 1000;
-            Z = Mathf.Round((-RawZ * positionMultiplier) * 1000) / 1000;
+            X = Mathf.Round((-RawX * positionMultiplier * Settings.SensitivityCoef.Value) * 1000) / 1000;
+            Y = Mathf.Round((RawY * positionMultiplier * Settings.SensitivityCoef.Value) * 1000) / 1000;
+            Z = Mathf.Round((-RawZ * positionMultiplier * Settings.SensitivityCoef.Value) * 1000) / 1000;
 
-            Yaw = Mathf.Clamp(RawYaw * rotationMultiplier,
+            Yaw = Mathf.Clamp(RawYaw * rotationMultiplier * Settings.SensitivityCoef.Value,
                 TrackIRManager.Instance.YawLimits.lower, TrackIRManager.Instance.YawLimits.upper);
             Yaw = Mathf.Round(Yaw * 1000) / 1000;
 
-            Pitch = Mathf.Clamp(RawPitch * rotationMultiplier,
+            Pitch = Mathf.Clamp(RawPitch * rotationMultiplier * Settings.SensitivityCoef.Value,
                 TrackIRManager.Instance.PitchLimits.lower, TrackIRManager.Instance.PitchLimits.upper);
             Pitch = Mathf.Round(Pitch * 1000) / 1000;
 
-            Roll = Mathf.Clamp(-RawRoll * rotationMultiplier,
+            Roll = Mathf.Clamp(-RawRoll * rotationMultiplier * Settings.SensitivityCoef.Value,
                 TrackIRManager.Instance.RollLimits.lower, TrackIRManager.Instance.RollLimits.upper);
             Roll = Mathf.Round(Roll * 1000) / 1000;
 

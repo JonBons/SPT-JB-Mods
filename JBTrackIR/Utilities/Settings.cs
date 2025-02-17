@@ -47,7 +47,7 @@ internal class Settings
         SensitivityCoef = config.Bind(
             MainSectionTitle,
             "TrackIR Sensitivity coef",
-            0.5f,
+            1f,
             new ConfigDescription(
                 "Senstivity coefficient to apply to all TrackIR inputs",
                 new AcceptableValueRange<float>(0, 1)
