@@ -12,9 +12,10 @@ public class PlayerLookPatch : ModulePatch
     private static bool wasCommandedLean = false;
     private static bool storeCommandedLean = false;
     private static float commandedTilt = 0f;
+    private static float lastTilt = 0f;
 
     const float lerpSpeed = 2.5f; // Adjust this for faster/slower interpolation
-    const float threshold = 0.01f; // Threshold to stop interpolation
+    const float threshold = 4.0f; // Threshold to stop interpolation
 
     private static Vector3 startPosition = Vector3.zero;
 
@@ -36,7 +37,10 @@ public class PlayerLookPatch : ModulePatch
         //Logger.LogInfo(string.Format("TIR DATA Final pos = {0}; Final rot = {1}", pos, rot));
     }
 
-    private static void UpdateLeaning(ref Player __instance, ref TrackIRData data) {
+    private static void UpdateLeaning(ref Player __instance, ref TrackIRData data)
+    {
+        float tiltValue = data.TargetTilt;
+
         // Check if the lean was commanded via keyboard
         if (PlayerControlsPatch.CommandLean != 0) wasCommandedLean = true;
 
@@ -52,20 +56,22 @@ public class PlayerLookPatch : ModulePatch
         if (PlayerControlsPatch.CommandLean == 0 && wasCommandedLean)
         {
             // Lerp from commandedTilt to targetTilt
-            __instance.MovementContext.SmoothedTilt = Mathf.Lerp(commandedTilt, data.TargetTilt, lerpSpeed * Time.deltaTime);
+            __instance.MovementContext.SmoothedTilt = Mathf.Lerp(commandedTilt, tiltValue, lerpSpeed * Time.deltaTime);
 
             // If close enough to the target, release control back to the axis
-            if (Mathf.Abs(__instance.MovementContext.SmoothedTilt - data.TargetTilt) < threshold)
+            if (Mathf.Abs(__instance.MovementContext.SmoothedTilt - tiltValue) < threshold)
             {
                 wasCommandedLean = false;
             }
         }
 
         // Leaning via axis (only if no leaning key is pressed and interpolation is done)
-        if (PlayerControlsPatch.CommandLean == 0 && !wasCommandedLean)
+        if (PlayerControlsPatch.CommandLean == 0 && !wasCommandedLean && (tiltValue != lastTilt))
         {
-            __instance.MovementContext.SmoothedTilt = data.TargetTilt;
+            __instance.MovementContext.SmoothedTilt = tiltValue;
         }
+
+        lastTilt = tiltValue;
     }
 
     private static void UpdateHeadPosition(ref Player __instance, ref TrackIRData data)
