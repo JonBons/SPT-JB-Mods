@@ -5,7 +5,7 @@ using JBTrackIR.Utilities;
 
 namespace JBTrackIR;
 
-[BepInPlugin("com.jonbons.trackir", "JonBons.TrackIR", "1.0.6")]
+[BepInPlugin("com.jonbons.trackir", "JonBons.TrackIR", "1.0.7")]
 public class Plugin : BaseUnityPlugin
 {
     private void Awake()
