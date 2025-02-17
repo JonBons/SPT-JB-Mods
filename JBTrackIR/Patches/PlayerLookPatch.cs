@@ -12,7 +12,6 @@ public class PlayerLookPatch : ModulePatch
     private static bool wasCommandedLean = false;
     private static bool storeCommandedLean = false;
     private static float commandedTilt = 0f;
-    private static float lastTilt = 0f;
 
     const float lerpSpeed = 2.5f; // Adjust this for faster/slower interpolation
     const float threshold = 4.0f; // Threshold to stop interpolation
@@ -66,12 +65,10 @@ public class PlayerLookPatch : ModulePatch
         }
 
         // Leaning via axis (only if no leaning key is pressed and interpolation is done)
-        if (PlayerControlsPatch.CommandLean == 0 && !wasCommandedLean && (tiltValue != lastTilt))
+        if (PlayerControlsPatch.CommandLean == 0 && !wasCommandedLean)
         {
             __instance.MovementContext.SmoothedTilt = tiltValue;
         }
-
-        lastTilt = tiltValue;
     }
 
     private static void UpdateHeadPosition(ref Player __instance, ref TrackIRData data)
