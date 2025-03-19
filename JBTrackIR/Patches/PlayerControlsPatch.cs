@@ -10,11 +10,11 @@ namespace JBTrackIR.Patches
 
         protected override MethodBase GetTargetMethod()
         {
-            return typeof(Class1579).GetMethod(nameof(Class1579.TranslateCommand), BindingFlags.Instance | BindingFlags.Public);
+            return typeof(Class1602).GetMethod(nameof(Class1602.TranslateCommand), BindingFlags.Instance | BindingFlags.Public);
         }
 
         [PatchPrefix]
-        public static void PatchPrefix(ref Class1579 __instance, ECommand command)
+        public static void PatchPrefix(ref Class1602 __instance, ECommand command)
         {
             switch (command)
             {
